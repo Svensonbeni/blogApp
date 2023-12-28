@@ -24,9 +24,7 @@ class CreateCommentRequest extends FormRequest
     public function rules()
     {
         return [
-            'titre' => 'required',
-            'slug' => 'required',
-            'slug' => 'required|unique:articles,slug',
+            'content' => 'required',
         ];
     }
 
@@ -36,16 +34,14 @@ class CreateCommentRequest extends FormRequest
             'success' =>false,
             'status_code' =>422,
             'error' => true,
-            'message' => 'Erreur de validation',
+            'message' => 'veuillez insérer votre commentaire',
             'errorsList' => $validator->errors()
         ]));
     }
 
     public function messages(){
         return [
-            'titre.required' => 'Le titre doit être renseigné',
-            'slug.required' => 'Le slug doit être renseigné',
-            'slug.unique' => 'Le slug existe déja',
+            'content.required' => 'Vous devez entrer un commentaire',
         ];
     }
 }

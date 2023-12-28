@@ -22,7 +22,7 @@ Route::post('/persons/register',[AuthController::class, 'register'])->name('regi
 Route::post('/persons/login',[AuthController::class, 'login'])->name('login');
 Route::get('/articles',[ArticleController::class, 'index']);
 Route::get('/articles/{article}',[ArticleController::class, 'show']);
-Route::get('articles/article/comments',[CommentController::class, 'index']);
+Route::get('articles/{article}/comments',[CommentController::class, 'index']);
 
 // ***************** routes protégées ************************
 
@@ -33,7 +33,7 @@ Route::group(['middleware'=>['auth:sanctum']], function(){
     Route::post('/persons/logout',[AuthController::class, 'logout'])->name('logout');
 
     // routes des commentaires
-    Route::post('articles/article/comments/create',[CommentController::class, 'store']);
+    Route::post('articles/{article}/comments/create',[CommentController::class, 'store']);
     Route::put('/comments/edit/{comment}',[CommentController::class, 'update']);
     Route::delete('/comments/{comment}',[CommentController::class, 'delete']);
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateCommentRequest;
 use App\Http\Requests\EditCommentRequest;
+use App\Models\Article;
 use App\Models\Comment;
 use Exception;
 use Illuminate\Http\Request;
@@ -16,9 +17,11 @@ class CommentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Article $article)
     {
-        //
+        $comment = $article->comment;
+        dd($article);
+        return response()->json(['comment' => $comment]);
     }
 
     /**
@@ -32,21 +35,20 @@ class CommentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(CreateCommentRequest $request)
+    public function store(CreateCommentRequest $request, Article $article) 
     {
         try {
             $this->authorize('create', Comment::class);
             $comment = new Comment();
-            $comment->titre = $request->titre;
-            $comment->slug = $request->slug;
-            $comment->description = $request->description;
+            $comment->content = $request->content;
             // Liaison d'un user a un post
             $comment->user_id = auth()->user()->id;
+            $comment->article_id = $article->id;
             $comment->save();
     
             return response()->json([
                 'status_code' => 200,
-                'status_message' => "L'comment a été ajouté",
+                'status_message' => " Vous avez associée un commentaire à cet article",
                 'data' => $comment,
             ]);
         } catch (Exception $e) {

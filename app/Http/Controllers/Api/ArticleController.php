@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateArticleRequest;
 use App\Http\Requests\EditArticleRequest;
 use App\Models\Article;
+use App\Models\Comment;
 use Exception;
 use Illuminate\Http\Request;
 
@@ -90,7 +91,7 @@ class ArticleController extends Controller
     public function update(EditArticleRequest $request, Article $article)
     {
         try {
-            $this->authorize('update', Article::class);
+            $this->authorize('create', Article::class);
             $article->titre = $request->titre;
             $article->slug = $request->slug;
             $article->description = $request->description;
@@ -128,6 +129,11 @@ class ArticleController extends Controller
             return response()->json($e);
         }
     
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
     }
     
 }
