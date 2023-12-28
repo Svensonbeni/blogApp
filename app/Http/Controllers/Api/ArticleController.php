@@ -41,10 +41,13 @@ class ArticleController extends Controller
     public function store(CreateArticleRequest $request)
     {
         try {
+            $this->authorize('create', Article::class);
             $article = new Article();
             $article->titre = $request->titre;
             $article->slug = $request->slug;
             $article->description = $request->description;
+            // Liaison d'un user a un post
+            $article->user_id = auth()->user()->id;
             $article->save();
     
             return response()->json([
@@ -60,9 +63,17 @@ class ArticleController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Article $article)
     {
-        //
+        try {
+            return response()->json([
+                'status_code' => 200,
+                'status_message' => "Un article",
+                'data' => $article,
+            ]);
+        } catch (Exception $e) {
+            return response()->json($e);
+        } 
     }
 
     /**
@@ -79,6 +90,7 @@ class ArticleController extends Controller
     public function update(EditArticleRequest $request, Article $article)
     {
         try {
+            $this->authorize('update', Article::class);
             $article->titre = $request->titre;
             $article->slug = $request->slug;
             $article->description = $request->description;
