@@ -20,7 +20,8 @@ class CommentController extends Controller
     public function index(Article $article)
     {
         $comment = $article->comment;
-        dd($article);
+       // $categorie->articles()->delete();
+        //dd($comment);
         return response()->json(['comment' => $comment]);
     }
 
@@ -38,7 +39,7 @@ class CommentController extends Controller
     public function store(CreateCommentRequest $request, Article $article) 
     {
         try {
-            $this->authorize('create', Comment::class);
+            //$this->authorize('create', Comment::class);
             $comment = new Comment();
             $comment->content = $request->content;
             // Liaison d'un user a un post
@@ -61,15 +62,15 @@ class CommentController extends Controller
      */
     public function show(Comment $Comment)
     {
-        try {
-            return response()->json([
-                'status_code' => 200,
-                'status_message' => "Un Comment",
-                'data' => $Comment,
-            ]);
-        } catch (Exception $e) {
-            return response()->json($e);
-        } 
+        // try {
+        //     return response()->json([
+        //         'status_code' => 200,
+        //         'status_message' => "Un Comment",
+        //         'data' => $Comment,
+        //     ]);
+        // } catch (Exception $e) {
+        //     return response()->json($e);
+        // } 
     }
 
     /**
@@ -86,15 +87,13 @@ class CommentController extends Controller
     public function update(EditCommentRequest $request, Comment $comment)
     {
         try {
-            $this->authorize('update', Comment::class);
-            $comment->titre = $request->titre;
-            $comment->slug = $request->slug;
-            $comment->description = $request->description;
+            //$this->authorize('update', Comment::class);
+            $comment->content = $request->content;
             $comment->save();
 
             return response()->json([
                 'status_code' => 200,
-                'status_message' => "Ce commentaire a été bien modifié",
+                'status_message' => "Ce commentaire a été modifié",
                 'data' => $comment,
             ]);
 
@@ -114,11 +113,11 @@ class CommentController extends Controller
     public function delete( Comment $comment)
     {
         try {
+            $comment->comment()->delete();
             $comment->delete();
             return response()->json([
                 'status_code' => 200,
-                'status_message' => "Ce commentaire a bien été supprimé",
-                'data' => $comment,
+                'status_message' => "Ce commentaire n'existe plus",
             ]);
         } catch (Exception $e) {
             return response()->json($e);

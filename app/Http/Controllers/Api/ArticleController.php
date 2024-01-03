@@ -49,6 +49,7 @@ class ArticleController extends Controller
             $article->description = $request->description;
             // Liaison d'un user a un post
             $article->user_id = auth()->user()->id;
+            $article->categorie_id = $request->categorie_id;
             $article->save();
     
             return response()->json([
@@ -91,7 +92,7 @@ class ArticleController extends Controller
     public function update(EditArticleRequest $request, Article $article)
     {
         try {
-            $this->authorize('create', Article::class);
+            $this->authorize('update', Article::class);
             $article->titre = $request->titre;
             $article->slug = $request->slug;
             $article->description = $request->description;
@@ -119,6 +120,8 @@ class ArticleController extends Controller
     public function delete( Article $article)
     {
         try {
+            $this->authorize('delete', Article::class);
+            $article->comment()->delete();
             $article->delete();
             return response()->json([
                 'status_code' => 200,
@@ -129,11 +132,6 @@ class ArticleController extends Controller
             return response()->json($e);
         }
     
-    }
-
-    public function comments()
-    {
-        return $this->hasMany(Comment::class);
     }
     
 }

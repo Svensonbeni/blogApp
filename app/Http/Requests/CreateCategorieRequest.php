@@ -6,7 +6,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class CreateCommentRequest extends FormRequest
+class CreateCategorieRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,12 +21,10 @@ class CreateCommentRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules()
+    public function rules(): array
     {
         return [
-            'content' => 'required',
-            //'user_id' => 'required|exists:users,id',
-           //'article_id' => 'required|exists:articles,id',
+            'libele' => 'required|unique:categories,libele',
         ];
     }
 
@@ -36,14 +34,15 @@ class CreateCommentRequest extends FormRequest
             'success' =>false,
             'status_code' =>422,
             'error' => true,
-            'message' => 'veuillez insérer votre commentaire',
+            'message' => 'Erreur de validation',
             'errorsList' => $validator->errors()
         ]));
     }
 
     public function messages(){
         return [
-            'content.required' => 'Vous devez entrer un commentaire',
+            'libele.required' => 'Le nom de la categorie  doit être renseigné',
+            'libele.unique' => 'Le nom de la categorie existe déja, veuillez entrer un autre nom',
         ];
     }
 }

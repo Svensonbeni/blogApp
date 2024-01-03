@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\ArticleController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CommentController;
+use App\Http\Controllers\Api\CategorieController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,7 +21,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/persons/register',[AuthController::class, 'register'])->name('register');
 Route::post('/persons/login',[AuthController::class, 'login'])->name('login');
-Route::get('/articles',[ArticleController::class, 'index']);
+Route::get('/articles',[ArticleController::class, 'index'])->name('lesArticles');
+Route::get('/categories',[CategorieController::class, 'index'])->name('listeCategorie');
 Route::get('/articles/{article}',[ArticleController::class, 'show']);
 Route::get('articles/{article}/comments',[CommentController::class, 'index']);
 
@@ -36,6 +38,11 @@ Route::group(['middleware'=>['auth:sanctum']], function(){
     Route::post('articles/{article}/comments/create',[CommentController::class, 'store']);
     Route::put('/comments/edit/{comment}',[CommentController::class, 'update']);
     Route::delete('/comments/{comment}',[CommentController::class, 'delete']);
+
+    // routes des categories
+    Route::post('categories/create',[CategorieController::class, 'store']);
+    Route::put('/categories/edit/{categorie}',[CategorieController::class, 'update']);
+    Route::delete('/categories/{categorie}',[CategorieController::class, 'delete']);
 
 });
 

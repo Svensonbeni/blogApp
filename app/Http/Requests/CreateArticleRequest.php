@@ -27,6 +27,8 @@ class CreateArticleRequest extends FormRequest
             'titre' => 'required',
             'slug' => 'required',
             'slug' => 'required|unique:articles,slug',
+           // 'description' => 'required',
+            'categorie_id' => 'required|exists:categories,id',
         ];
     }
 
