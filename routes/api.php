@@ -26,6 +26,9 @@ Route::get('/categories',[CategorieController::class, 'index'])->name('listeCate
 Route::get('/articles/{article}',[ArticleController::class, 'show']);
 Route::get('articles/{article}/comments',[CommentController::class, 'index']);
 
+Route::get('/articles/search/{keyWord}',[ArticleController::class, 'search']);
+
+
 // ***************** routes protégées ************************
 
 Route::group(['middleware'=>['auth:sanctum']], function(){

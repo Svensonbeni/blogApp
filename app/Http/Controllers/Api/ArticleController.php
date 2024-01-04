@@ -133,5 +133,60 @@ class ArticleController extends Controller
         }
     
     }
+
+    // public function search($keyWord)
+    // {
+    //     try {
+    //         // Utiliser la méthode query() pour construire la requête sans exécuter
+    //         $query = Article::query();
+
+    //         // Ajouter des conditions de recherche
+    //         $query->where('titre', 'like', '%'.$keyWord.'%')
+    //               ->orWhere('slug', 'like', '%'.$keyWord.'%');
+
+    //         // Exécuter la requête et récupérer les résultats
+    //         $articles = $query->get();
+    //         dd($articles);
+
+    //         // Vérifier si des articles ont été trouvés
+    //         if ($articles->isEmpty()) {
+    //             return response()->json([
+    //                 'status_code' => 404,
+    //                 'status_message' => 'Aucun article trouvé pour le mot-clé fourni.',
+    //             ]);
+    //         }
+
+    //         // Retourner les résultats au format JSON
+    //         return response()->json([
+    //             'status_code' => 200,
+    //             'status_message' => 'L\'article a bien été retrouvé',
+    //             'data' => $articles,
+    //         ]);
+    //     } catch (\Exception $e) {
+    //         // Gérer les erreurs et renvoyer une réponse JSON appropriée
+    //         return response()->json([
+    //             'status_code' => 500,
+    //             'status_message' => 'Erreur lors de la recherche d\'articles.',
+    //             'error' => $e->getMessage(),
+    //         ]);
+    //     }
+    // }
+
+    public function search($keyWord)
+    {
+        try {
+            $article = Article::where('titre', 'like', '%'.$keyWord.'%')
+                             ->orWhere('slug', 'like', "%$keyWord%")->get();
+            return response()->json([
+                'status_code' => 200,
+                'status_message' => "L'article a bien été retrouvé",
+                'data' => $article,
+                ]);
+
+        } catch (Exception $e) {
+            return response()->json($e);
+        }
+    }
     
 }
+
